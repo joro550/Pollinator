@@ -5,13 +5,13 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] public float speed;
     
-    private Rigidbody2D _body;
+    private Rigidbody2D _rigidBody;
     private Animator _cameraAnimator;
     private static readonly int Moving = Animator.StringToHash("IsMoving");
 
     private void Start()
     {
-        _body = GetComponent<Rigidbody2D> ();
+        _rigidBody = GetComponent<Rigidbody2D> ();
         _cameraAnimator = GetComponent<Animator>();
     }
 
@@ -25,7 +25,7 @@ public class Movement : MonoBehaviour
         if (IsMoving(movement))
         {
             _cameraAnimator.SetBool(Moving, true);
-            _body.position += movement * speed / Time.deltaTime;
+            _rigidBody.velocity = (movement * speed );
         }
         else
         {
@@ -34,6 +34,6 @@ public class Movement : MonoBehaviour
         
     }
 
-    private bool IsMoving(Vector2 vector) 
+    private static bool IsMoving(Vector2 vector) 
         => vector.x != 0 || vector.y != 0;
 }

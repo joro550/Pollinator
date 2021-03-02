@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 8306389590372073048}
   - component: {fileID: 8306389590372073050}
   - component: {fileID: 4485056754137389259}
-  m_Layer: 8
+  - component: {fileID: 1365654204}
+  m_Layer: 9
   m_Name: PlayerContainer
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -73,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e251df02a88cb24dbc0f56bfd069798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.003
+  speed: 13
 --- !u!95 &8306389590372073050
 Animator:
   serializedVersion: 3
@@ -105,8 +106,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
+  m_Mass: 2
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -114,6 +115,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1365654204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8306389590372073047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa37544379f24ac3a64227f7890c14ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pollenLimit: 100
+  harvestSpeed: 5
+  depositSpeed: 5
+  actionWaitTime: 0.5
+  spriteRenderer: {fileID: 8306389591139453104}
 --- !u!1 &8306389591139453102
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8306389591139453105}
   - component: {fileID: 8306389591139453104}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
