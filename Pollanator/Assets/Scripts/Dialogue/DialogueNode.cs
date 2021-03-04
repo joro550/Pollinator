@@ -6,34 +6,22 @@ namespace Dialogue
 {
     public class DialogueNode : ScriptableObject
     {
-        [SerializeField]
-        bool isPlayerSpeaking = false;
-        [SerializeField]
-        string text;
-        [SerializeField]
-        List<string> children = new List<string>();
-        [SerializeField]
-        Rect rect = new Rect(0, 0, 200, 100);
+        [SerializeField] bool isPlayerSpeaking = false;
+        [SerializeField] string text;
+        [SerializeField] List<string> children = new List<string>();
+        [SerializeField] Rect rect = new Rect(0, 0, 200, 100);
 
-        public Rect GetRect()
-        {
-            return rect;
-        }
+        public Rect GetRect() 
+            => rect;
 
-        public string GetText()
-        {
-            return text;
-        }
+        public string GetText() 
+            => text;
 
-        public List<string> GetChildren()
-        {
-            return children;
-        }
+        public List<string> GetChildren() 
+            => children;
 
-        public bool IsPlayerSpeaking()
-        {
-            return isPlayerSpeaking;
-        }
+        public bool IsPlayerSpeaking() 
+            => isPlayerSpeaking;
 
 #if UNITY_EDITOR
         public void SetPosition(Vector2 newPosition)

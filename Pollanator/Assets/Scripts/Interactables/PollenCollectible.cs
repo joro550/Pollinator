@@ -1,4 +1,4 @@
-﻿using Interactables.Visitors;
+﻿using Visitors;
 using UnityEngine;
 
 namespace Interactables

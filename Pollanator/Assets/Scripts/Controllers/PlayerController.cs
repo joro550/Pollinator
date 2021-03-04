@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using Visitors;
+using UnityEngine;
 using Interactables;
-using Interactables.Visitors;
 
 namespace Controllers
 {
@@ -12,14 +12,14 @@ namespace Controllers
         [SerializeField] private float actionWaitTime = 0.5f;
         [SerializeField] private SpriteRenderer spriteRenderer;
 
+        private float _timer;
         private bool _canHarvest;
         private bool _canDeposit;
         private int _pollenCount;
-        private float _timer;
 
+        private Movement _movement;
         private Collectible _collectible;
         private BaseController _currentBase;
-        private Movement _movement;
 
         public void Awake() 
             => _movement = GetComponent<Movement>();
@@ -43,9 +43,9 @@ namespace Controllers
                 return;
             
             if (_canHarvest)
-                _collectible.Accept(new PlayerVisitor(this));
+                _collectible.Accept(new InteractionVisitor(this));
             else if (_canDeposit)
-                _currentBase.Accept(new Controllers.Visitors.PlayerVisitor(this));
+                _currentBase.Accept(new InteractionVisitor(this));
             _timer = 0;
         }
 

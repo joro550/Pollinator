@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Controllers.Visitors;
+using Visitors;
 
 namespace Controllers
 {

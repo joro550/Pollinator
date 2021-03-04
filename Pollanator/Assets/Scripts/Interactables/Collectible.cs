@@ -1,6 +1,6 @@
 ﻿using Controllers;
-using Interactables.Visitors;
 using UnityEngine;
+using Visitors;
 
 namespace Interactables
 {
