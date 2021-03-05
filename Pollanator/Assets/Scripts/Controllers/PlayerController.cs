@@ -69,7 +69,10 @@ namespace Controllers
         
         public int GetPollenCount()
             => _pollenCount;
-        
+
+        public int GetPollenLimit() 
+            => pollenLimit;
+
         public int GetHarvestSpeed()
         {
             var limit = pollenLimit - _pollenCount;

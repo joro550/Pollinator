@@ -44,7 +44,7 @@ TagManager:
   - name: Background
     uniqueID: 18787331
     locked: 0
-  - name: Trees
+  - name: Foreground
     uniqueID: 1257434545
     locked: 0
   - name: Collectible
