@@ -16,13 +16,17 @@ namespace Controllers
         private bool _canHarvest;
         private bool _canDeposit;
         private int _pollenCount;
+        private Vector3 _originalScale;
 
         private Movement _movement;
         private Collectible _collectible;
         private BaseController _currentBase;
 
-        public void Awake() 
-            => _movement = GetComponent<Movement>();
+        public void Awake()
+        {
+            _movement = GetComponent<Movement>();
+            _originalScale = transform.localScale;
+        }
 
         public void Update()
         {
@@ -36,11 +40,15 @@ namespace Controllers
         private void Interactions()
         {
             _timer += Time.deltaTime;
+            
             if (_timer < actionWaitTime)
                 return;
 
-            if (!Input.GetKey(KeyCode.E)) 
+            if (!Input.GetKey(KeyCode.E))
+            {
+                transform.localScale = _originalScale;
                 return;
+            }
             
             if (_canHarvest)
                 _collectible.Accept(new InteractionVisitor(this));
@@ -82,6 +90,7 @@ namespace Controllers
         public void Harvest(int harvestAmount)
         {
             _pollenCount += harvestAmount;
+            transform.localScale = _originalScale / 2;
         }
 
         public int GetDepositAmount()
