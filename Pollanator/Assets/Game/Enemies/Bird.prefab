@@ -156,6 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb90874adc50495db171d9c277b40122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationFlag: IsFacingUp
+  isInverted: 1
 --- !u!1 &4173961024484617370
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +314,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb90874adc50495db171d9c277b40122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationFlag: IsFacingUp
+  isInverted: 0
 --- !u!1 &4845986155909994577
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,6 +358,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4786540921943047}
   - component: {fileID: 5769377924628603220}
+  - component: {fileID: 4886707079314812678}
+  - component: {fileID: 7552434470675027958}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -369,8 +375,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5515764509225207032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.171, y: -0.146, z: 0}
+  m_LocalScale: {x: 0.6, y: 0.68437505, z: 1}
   m_Children: []
   m_Father: {fileID: 9163481725737108118}
   m_RootOrder: 0
@@ -415,7 +421,7 @@ SpriteRenderer:
   m_SortingLayerID: -1435119629
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9fc3b333e883a744daa9e1b8aaf64b63, type: 3}
+  m_Sprite: {fileID: 4797189033540274322, guid: 46394c99a03f958458d0a5791a8a2233, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -426,6 +432,59 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &4886707079314812678
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5515764509225207032}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.23723727, y: 0.37296882}
+      - {x: -0.46875, y: -0.03125}
+      - {x: -0.46875, y: -0.1875}
+      - {x: -0.3125, y: -0.28125}
+      - {x: 0.008509006, y: -0.3024217}
+      - {x: 0.34375, y: -0.25}
+      - {x: 0.5, y: 0.03125}
+      - {x: 0.5, y: 0.46875}
+      - {x: 0.46875, y: 0.5}
+--- !u!95 &7552434470675027958
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5515764509225207032}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dcb3592ec5eac9c48aa4e4a11e095c4b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5648784949593148502
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,6 +609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb90874adc50495db171d9c277b40122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationFlag: 
+  isInverted: 0
 --- !u!1 &6168969942492573893
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,6 +735,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb90874adc50495db171d9c277b40122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationFlag: 
+  isInverted: 1
 --- !u!1 &9163481725737108105
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,6 +748,7 @@ GameObject:
   - component: {fileID: 9163481725737108118}
   - component: {fileID: 5545285730451760224}
   - component: {fileID: 5432457410111768572}
+  - component: {fileID: 2889869076860383834}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Untagged
@@ -722,12 +786,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   waitTime: 3
-  sightLineChangeTme: 0
   startingPosition: {fileID: 0}
-  bottomLeftSightLine: {fileID: 3020195532077258202}
-  bottomRightSightLine: {fileID: 1673998466363466486}
-  topLeftSightLine: {fileID: 2600777446807450528}
-  topRightSightLine: {fileID: 7787842667980362615}
+  spriteContainer: {fileID: 5515764509225207032}
 --- !u!50 &5432457410111768572
 Rigidbody2D:
   serializedVersion: 4
@@ -749,3 +809,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2889869076860383834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9163481725737108105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37eb15895bcc4f0295363443b91afbda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sightLineChangeTme: 3
+  bottomLeftSightLine: {fileID: 3020195532077258202}
+  bottomRightSightLine: {fileID: 1673998466363466486}
+  topLeftSightLine: {fileID: 2600777446807450528}
+  topRightSightLine: {fileID: 7787842667980362615}

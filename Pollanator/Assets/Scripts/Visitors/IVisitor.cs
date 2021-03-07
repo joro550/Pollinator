@@ -7,5 +7,6 @@ namespace Visitors
     {
         void VisitBaseController(BaseController baseController);
         void VisitPollenCollectible(PollenCollectible pollenCollectible);
+        void VisitPlayerController(PlayerController playerController);
     }
 }

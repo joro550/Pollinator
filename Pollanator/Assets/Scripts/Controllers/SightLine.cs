@@ -2,10 +2,14 @@
 
 namespace Controllers
 {
-    public class SighLine : MonoBehaviour
+    public class SightLine : MonoBehaviour
     {
+        [SerializeField] public string animationFlag;
+        [SerializeField] public bool isInverted;
+        
         private SpriteRenderer _spriteRenderer;
         private PolygonCollider2D _polygonCollider;
+        
 
         private void Awake()
         {
@@ -24,5 +28,11 @@ namespace Controllers
             _spriteRenderer.enabled = false;
             _polygonCollider.enabled = false;
         }
+
+        public string AnimationFlag() 
+            => animationFlag;
+
+        public bool IsInverted() 
+            => isInverted;
     }
 }

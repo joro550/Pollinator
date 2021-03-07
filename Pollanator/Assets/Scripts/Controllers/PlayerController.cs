@@ -6,11 +6,18 @@ namespace Controllers
 {
     public class PlayerController : MonoBehaviour
     {
+        [Header("Interactable")]
         [SerializeField] private int pollenLimit = 100;
         [SerializeField] private int harvestSpeed = 10;
         [SerializeField] private int depositSpeed = 10;
         [SerializeField] private float actionWaitTime = 0.5f;
+        
+        [Header("Sprite")]
         [SerializeField] private SpriteRenderer spriteRenderer;
+
+        [Header("Player")] 
+        [SerializeField] private int lives = 3;
+        [SerializeField] private Transform baseLocation;
 
         private float _timer;
         private bool _canHarvest;
@@ -18,13 +25,12 @@ namespace Controllers
         private int _pollenCount;
         private Vector3 _originalScale;
 
-        private Movement _movement;
         private Collectible _collectible;
         private BaseController _currentBase;
 
         public void Awake()
         {
-            _movement = GetComponent<Movement>();
+            GetComponent<Movement>();
             _originalScale = transform.localScale;
         }
 
@@ -32,8 +38,6 @@ namespace Controllers
         {
             spriteRenderer.color = _canHarvest ? Color.blue :
                 _canDeposit ? Color.red : Color.white;
-
-
             Interactions();
         }
 
@@ -87,6 +91,9 @@ namespace Controllers
             return limit < harvestSpeed ? limit : harvestSpeed;
         }
 
+        public int GetLives()
+            => lives;
+
         public void Harvest(int harvestAmount)
         {
             _pollenCount += harvestAmount;
@@ -104,6 +111,20 @@ namespace Controllers
 
             _pollenCount -= depositSpeed;
             return depositSpeed;
+        }
+
+        public void Accept(IVisitor visitor) 
+            => visitor.VisitPlayerController(this);
+
+        public void HasBeenHit()
+        {
+            lives -= 1;
+            transform.position = baseLocation.position;
+        }
+
+        public void Reset()
+        {
+            
         }
     }
 }

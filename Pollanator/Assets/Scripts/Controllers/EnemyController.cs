@@ -1,48 +1,60 @@
-﻿using System;
+﻿using Visitors;
 using UnityEngine;
 
 namespace Controllers
 {
+    [RequireComponent(typeof(SightLineController))]
     public class EnemyController : MonoBehaviour
     {
         [SerializeField] private float speed = 10.0f;
         [SerializeField] private float waitTime = 3.0f;
-        [SerializeField] private float sightLineChangeTme;
         [SerializeField] private Transform startingPosition;
+        [SerializeField] private GameObject spriteContainer;
         
-        [SerializeField] private SighLine bottomLeftSightLine;
-        [SerializeField] private SighLine bottomRightSightLine;
-        [SerializeField] private SighLine topLeftSightLine;
-        [SerializeField] private SighLine topRightSightLine;
-
+        private Animator _animator;
         private float _lastSeenPlayer;
         private Vector2 _targetPosition;
         private float _lastSightLineChange;
-        private SightLine _currentSightLine = SightLine.BottomRight;
-    
+        private SightLineController _sightLineController;
+
+
+        private void Awake()
+        {
+            _animator = GetComponentInChildren<Animator>();
+        }
+
         public void Start()
         {
-            bottomLeftSightLine.Disable();
-            bottomRightSightLine.Disable();
-            topLeftSightLine.Disable();
-            topRightSightLine.Disable();
+            _sightLineController = GetComponent<SightLineController>();
+            _sightLineController.Disable();
 
-            var current = GetCurrentSightLine();
+            var current = _sightLineController.GetCurrentSightLine();
             current.Enable();
         }
 
         private void Update()
         {
             Movement();
-            
-            if (!CanSeePlayer())
-                SightLineChange();
+
+            if (CanSeePlayer()) return;
+
+            // close old sight line
+            var current = _sightLineController.GetCurrentSightLine();
+            if(!string.IsNullOrEmpty(current.AnimationFlag()))
+                _animator.SetBool(current.AnimationFlag(), false);
+
+            // new sight line
+            _sightLineController.SightLineChange();
+            current = _sightLineController.GetCurrentSightLine();
+
+            if(!string.IsNullOrEmpty(current.AnimationFlag()))
+                _animator.SetBool(current.AnimationFlag(), true);
+
+            spriteContainer.transform.rotation = Quaternion.Euler(0, current.isInverted ? 180 : 0, 0);
         }
 
-        private bool CanSeePlayer()
-        {
-            return _targetPosition != Vector2.zero;
-        }
+        private bool CanSeePlayer() 
+            => _targetPosition != Vector2.zero;
 
         private void Movement()
         {
@@ -60,15 +72,15 @@ namespace Controllers
             transform.position = Vector2.MoveTowards(transform.position, _targetPosition, step);
         }
 
-        private void SightLineChange()
+
+
+        public void OnCollisionEnter2D(Collision2D other)
         {
-            _lastSightLineChange += Time.deltaTime;
-            
-            if (!(_lastSightLineChange >= sightLineChangeTme)) 
-                return;
-            GetCurrentSightLine().Disable();
-            GetNextSightLine().Enable();
-            _lastSightLineChange = 0;
+            if (other.collider.CompareTag("Player"))
+            {
+                var player = other.collider.GetComponent<PlayerController>();
+                player.Accept(new EnemyVisitor(this));
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -96,64 +108,11 @@ namespace Controllers
             }
         }
 
-        private SighLine GetCurrentSightLine()
+        public void Reset()
         {
-
-            switch (_currentSightLine)
-            {
-                case SightLine.BottomRight:
-                    return bottomRightSightLine;
-                case  SightLine.BottomLeft:
-                    return bottomLeftSightLine;
-                case SightLine.TopLeft:
-                    return topLeftSightLine;
-                case SightLine.TopRight:
-                    return topRightSightLine;
-                default:
-                    throw new ArgumentException();
-            };
+            transform.position = startingPosition.position;
+            _targetPosition = Vector2.zero;
+            _lastSeenPlayer = 0;
         }
-
-        private SighLine GetNextSightLine()
-        {
-            switch (_currentSightLine)
-            {
-                case SightLine.BottomRight:
-                {
-                    _currentSightLine = SightLine.BottomLeft;
-                    return bottomLeftSightLine;
-                    break;
-                }
-                case SightLine.BottomLeft:
-                {
-                    _currentSightLine = SightLine.TopLeft;
-                    return topLeftSightLine;
-                    break;
-                }
-                case SightLine.TopLeft:
-                {
-                    _currentSightLine = SightLine.TopRight;
-                    return topRightSightLine;
-                    break;
-                }
-                case SightLine.TopRight:
-                {
-                    _currentSightLine = SightLine.BottomRight;
-                    return bottomRightSightLine;
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private enum SightLine
-        {
-            BottomLeft,
-            BottomRight,
-            TopLeft,
-            TopRight
-        }
-
     }
 }

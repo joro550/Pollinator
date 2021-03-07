@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Controllers
 {
@@ -12,5 +13,8 @@ namespace Controllers
             _basePollenCount.text = 
                 $"Base pollen: {baseController.GetPollenCount().ToString()}";
         }
+
+        public void ResetScene() 
+            => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
