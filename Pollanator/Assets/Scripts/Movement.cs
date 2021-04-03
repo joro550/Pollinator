@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Controllers;
+using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class Movement : MonoBehaviour
@@ -8,8 +9,9 @@ public class Movement : MonoBehaviour
     
     private Rigidbody2D _rigidBody;
     private Animator _cameraAnimator;
-    private static readonly int Moving = Animator.StringToHash("IsMoving");
+    private PlayerController _playerController;
     
+    private static readonly int Moving = Animator.StringToHash("IsMoving");
     private static readonly int FlyUp = Animator.StringToHash("FlyUp");
     private static readonly int FlyDown = Animator.StringToHash("FlyDown");
     private static readonly int FlyLeft = Animator.StringToHash("FlyLeft");
@@ -19,6 +21,7 @@ public class Movement : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D> ();
         _cameraAnimator = GetComponent<Animator>();
+        _playerController = GetComponent<PlayerController>();
     }
 
     private void Update()
@@ -32,8 +35,15 @@ public class Movement : MonoBehaviour
 
         if (IsMoving(movement))
         {
+            var pollenCount = _playerController.GetPollenCount();
+            
             _cameraAnimator.SetBool(Moving, true);
-            _rigidBody.velocity = (movement * speed );
+            var movementSpeed =  movement * speed;
+            if (pollenCount > 0) 
+                movementSpeed = movement * ((speed / pollenCount) * 70);
+            
+            print(movementSpeed);
+            _rigidBody.velocity = movementSpeed;
         }
         else
         {

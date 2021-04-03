@@ -12,15 +12,16 @@ namespace Controllers
         [SerializeField] private GameObject spriteContainer;
         
         private Animator _animator;
-        private float _lastSeenPlayer;
-        private Vector2 _targetPosition;
         private float _lastSightLineChange;
+        private SpriteRenderer _spriteRenderer;
         private SightLineController _sightLineController;
 
+        private static readonly int IsFlyingHorizontally = Animator.StringToHash("IsFlyingHorizontally");
 
         private void Awake()
         {
             _animator = GetComponentInChildren<Animator>();
+            _spriteRenderer = spriteContainer.GetComponent<SpriteRenderer>();
         }
 
         public void Start()
@@ -34,45 +35,59 @@ namespace Controllers
 
         private void Update()
         {
+            // Set things back to how they were before we touched them
+            spriteContainer.transform.rotation = Quaternion.identity;
+            _spriteRenderer.flipY = false;
+            
             Movement();
-
-            if (CanSeePlayer()) return;
+            
+            var currentSightLine = _sightLineController.GetCurrentSightLine();
+            if (_sightLineController.CanSeePlayer())
+            {
+                SetCurrentSightLineAnimation(currentSightLine, false);
+                return;
+            }
+            
+            _animator.SetBool(IsFlyingHorizontally, false);
 
             // close old sight line
-            var current = _sightLineController.GetCurrentSightLine();
-            if(!string.IsNullOrEmpty(current.AnimationFlag()))
-                _animator.SetBool(current.AnimationFlag(), false);
+            SetCurrentSightLineAnimation(currentSightLine, false);
 
             // new sight line
-            _sightLineController.SightLineChange();
-            current = _sightLineController.GetCurrentSightLine();
+            currentSightLine = _sightLineController.SightLineChange();
 
-            if(!string.IsNullOrEmpty(current.AnimationFlag()))
-                _animator.SetBool(current.AnimationFlag(), true);
-
-            spriteContainer.transform.rotation = Quaternion.Euler(0, current.isInverted ? 180 : 0, 0);
+            SetCurrentSightLineAnimation(currentSightLine, true);
+            spriteContainer.transform.rotation = Quaternion.Euler(0, currentSightLine.isInverted ? 180 : 0, 0);
         }
 
-        private bool CanSeePlayer() 
-            => _targetPosition != Vector2.zero;
+        private void SetCurrentSightLineAnimation(SightLine currentSightLine, bool isEnabled)
+        {
+            if (!string.IsNullOrEmpty(currentSightLine.AnimationFlag()))
+                _animator.SetBool(currentSightLine.AnimationFlag(), isEnabled);
+        }
 
         private void Movement()
         {
             var step = speed * Time.deltaTime;
 
-            if (!CanSeePlayer())
+            if (!_sightLineController.CanSeePlayer())
             {
-                _lastSeenPlayer += Time.deltaTime;
-                if (_lastSeenPlayer > waitTime)
+                if (_sightLineController.LastSeenTarget() > waitTime)
                     transform.position = Vector2.MoveTowards(transform.position, startingPosition.position, step);
-
                 return;
             }
 
-            transform.position = Vector2.MoveTowards(transform.position, _targetPosition, step);
+            var targetPosition = _sightLineController.GetTargetPosition();
+            var dir = targetPosition - spriteContainer.transform.position;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            
+            var rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            spriteContainer.transform.rotation = rotation;
+            _animator.SetBool(IsFlyingHorizontally, true);
+
+            _spriteRenderer.flipY = _sightLineController.IsLeftSide();
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, step);
         }
-
-
 
         public void OnCollisionEnter2D(Collision2D other)
         {
@@ -83,36 +98,10 @@ namespace Controllers
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                _lastSeenPlayer = 0;
-                _targetPosition = other.transform.position;
-            }
-        }
-
-        private void OnTriggerStay2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                _targetPosition = other.transform.position;
-            }
-        }
-    
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                _targetPosition = Vector2.zero;
-            }
-        }
-
         public void Reset()
         {
             transform.position = startingPosition.position;
-            _targetPosition = Vector2.zero;
-            _lastSeenPlayer = 0;
+            _sightLineController.Reset();
         }
     }
 }

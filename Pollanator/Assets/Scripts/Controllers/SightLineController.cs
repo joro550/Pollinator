@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Visitors;
 
 namespace Controllers
 {
@@ -14,17 +15,39 @@ namespace Controllers
         
         private float _lastSightLineChange;
         private SightLine _currentSightLine = SightLine.BottomRight;
-        
-        public void SightLineChange()
+
+        private float _lastSeenTarget;
+        private Vector3 _targetPosition;
+
+        public void Update()
+        {
+            if (!CanSeePlayer())
+            {
+                _lastSeenTarget += Time.deltaTime;
+            }
+        }
+
+        public float LastSeenTarget() 
+            => _lastSeenTarget;
+
+        public Vector3 GetTargetPosition() 
+            => _targetPosition;
+
+        public Controllers.SightLine SightLineChange()
         {
             _lastSightLineChange += Time.deltaTime;
+
+            if (!(_lastSightLineChange >= sightLineChangeTme))
+                return GetCurrentSightLine();
             
-            if (!(_lastSightLineChange >= sightLineChangeTme)) 
-                return;
             GetCurrentSightLine().Disable();
             GetNextSightLine().Enable();
             _lastSightLineChange = 0;
+            return GetCurrentSightLine();
         }
+        
+        public bool CanSeePlayer() 
+            => _targetPosition != Vector3.zero;
 
         public Controllers.SightLine GetCurrentSightLine()
         {
@@ -51,30 +74,55 @@ namespace Controllers
                 {
                     _currentSightLine = SightLine.BottomLeft;
                     return bottomLeftSightLine;
-                    break;
                 }
                 case SightLine.BottomLeft:
                 {
                     _currentSightLine = SightLine.TopLeft;
                     return topLeftSightLine;
-                    break;
                 }
                 case SightLine.TopLeft:
                 {
                     _currentSightLine = SightLine.TopRight;
                     return topRightSightLine;
-                    break;
                 }
                 case SightLine.TopRight:
                 {
                     _currentSightLine = SightLine.BottomRight;
                     return bottomRightSightLine;
-                    break;
                 }
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public bool IsLeftSide() 
+            => _currentSightLine == SightLine.BottomLeft || _currentSightLine == SightLine.TopLeft;
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _lastSeenTarget = 0;
+                _targetPosition = other.transform.position;
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _targetPosition = other.transform.position;
+            }
+        }
+    
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _targetPosition = Vector2.zero;
+            }
+        }
+        
 
         private enum SightLine
         {
@@ -90,6 +138,12 @@ namespace Controllers
             bottomRightSightLine.Disable();;
             topLeftSightLine.Disable();;
             topRightSightLine.Disable();;
+        }
+
+        public void Reset()
+        {
+            _targetPosition = Vector2.zero;
+            _lastSeenTarget = 0;
         }
     }
 }

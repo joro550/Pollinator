@@ -43,7 +43,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b3e2256a6d4a1c99085adfdae65ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
-  baseController: {fileID: 0}
-  _playerPollenCount: {fileID: 0}
-  _basePollenCount: {fileID: 0}
+  interactableSlider: {fileID: 0}

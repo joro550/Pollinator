@@ -7,9 +7,9 @@ namespace Controllers
     public class PlayerController : MonoBehaviour
     {
         [Header("Interactable")]
-        [SerializeField] private int pollenLimit = 100;
-        [SerializeField] private int harvestSpeed = 10;
-        [SerializeField] private int depositSpeed = 10;
+        [SerializeField] private float pollenLimit = 100;
+        [SerializeField] private float harvestSpeed = 10;
+        [SerializeField] private float depositSpeed = 10;
         [SerializeField] private float actionWaitTime = 0.5f;
         
         [Header("Sprite")]
@@ -22,7 +22,7 @@ namespace Controllers
         private float _timer;
         private bool _canHarvest;
         private bool _canDeposit;
-        private int _pollenCount;
+        private float _pollenCount;
         private Vector3 _originalScale;
 
         private Collectible _collectible;
@@ -36,8 +36,6 @@ namespace Controllers
 
         public void Update()
         {
-            spriteRenderer.color = _canHarvest ? Color.blue :
-                _canDeposit ? Color.red : Color.white;
             Interactions();
         }
 
@@ -79,13 +77,13 @@ namespace Controllers
             _currentBase = baseController;
         }
         
-        public int GetPollenCount()
+        public float GetPollenCount()
             => _pollenCount;
 
-        public int GetPollenLimit() 
+        public float GetPollenLimit() 
             => pollenLimit;
 
-        public int GetHarvestSpeed()
+        public float GetHarvestSpeed()
         {
             var limit = pollenLimit - _pollenCount;
             return limit < harvestSpeed ? limit : harvestSpeed;
@@ -94,13 +92,13 @@ namespace Controllers
         public int GetLives()
             => lives;
 
-        public void Harvest(int harvestAmount)
+        public void Harvest(float harvestAmount)
         {
             _pollenCount += harvestAmount;
             transform.localScale = _originalScale / 2;
         }
 
-        public int GetDepositAmount()
+        public float GetDepositAmount()
         {
             if (_pollenCount < depositSpeed)
             {
@@ -120,11 +118,6 @@ namespace Controllers
         {
             lives -= 1;
             transform.position = baseLocation.position;
-        }
-
-        public void Reset()
-        {
-            
         }
     }
 }

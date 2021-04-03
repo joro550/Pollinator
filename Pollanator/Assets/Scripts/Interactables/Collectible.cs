@@ -13,6 +13,7 @@ namespace Interactables
 
             var controller = other.GetComponent<PlayerController>();
             controller.HasEnteredHarvestRange(this);
+            Accept(new InteractionCollideVisitor());
         }
 
         public void OnTriggerExit2D(Collider2D other)
@@ -22,6 +23,7 @@ namespace Interactables
             
             var controller = other.GetComponent<PlayerController>();
             controller.SetCanHarvest(false);
+            Accept(new InteractionCollideVisitor(true));
         }
 
         public abstract void Accept(IVisitor visitor);
